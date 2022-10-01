@@ -1,4 +1,6 @@
 import pygame
+import random as rdn
+from fmia_soccer import Soccer
 
 _PITCH_WIDTH = 1200
 _PITCH_HEIGHT = 800
@@ -19,17 +21,16 @@ _GOAL_HEIGHT = 73.2
 class Pitch(object):
 
     def __init__(self):
-
         self.clock_update = pygame.time.Clock()  # clock to manage time update and FPS
         self.fall_time = 0  # time to give rythm of the game update (and the falling active piece)
         self.game_time = 0  # time to store the total time
         self.pitch_frame = pygame.Surface((_PITCH_WIDTH, _PITCH_HEIGHT))  # main surface
         self.pitch_frame.fill((126, 200, 80))
-        # self.game.launch_piece()  # launch the first active piece
-        self.highlighted = False  # if the frame is highl
-    #    pygame.draw.rect(self.game_frame, (255, 255, 255), (0, 0, 100, 100), 2)
+        r1 = rdn.randint(_TOUCH_WIDTH, _PITCH_WIDTH)
+        r2 = rdn.randint(_TOUCH_WIDTH, _PITCH_HEIGHT)
+        self.soccer = Soccer(r1, r2)
 
-    def render(self):
+    def render_pitch(self):
         # dessine les lignes du terrain
         pygame.draw.rect(self.pitch_frame, (255, 255, 255), (_TOUCH_WIDTH, _TOUCH_WIDTH, _PITCH_WIDTH-2*_TOUCH_WIDTH, _PITCH_HEIGHT-2*_TOUCH_WIDTH), _LINE_THICKNESS)
         # dessine la line médiane
@@ -50,3 +51,10 @@ class Pitch(object):
         # dessine les cages
         pygame.draw.rect(self.pitch_frame, (158, 158, 158), (_TOUCH_WIDTH-_GOAL_WIDTH+2, (_PITCH_HEIGHT-_GOAL_HEIGHT)/2, _GOAL_WIDTH, _GOAL_HEIGHT), 0)
         pygame.draw.rect(self.pitch_frame, (158, 158, 158), (_PITCH_WIDTH-_TOUCH_WIDTH-2, (_PITCH_HEIGHT-_GOAL_HEIGHT)/2, _GOAL_WIDTH, _GOAL_HEIGHT), 0)
+
+    def render_player(self):
+        pygame.draw.circle(self.pitch_frame, (255, 0, 0), (self.soccer.posx, self.soccer.posy), self.soccer.soccer_size/2, width=0)
+
+    def render(self):
+        self.render_pitch()
+        self.render_player()
