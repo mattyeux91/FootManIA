@@ -30,14 +30,21 @@ while running:
             pygame.quit()
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                soccer.newposition(2)
-            elif event.key == pygame.K_LEFT:
-                soccer.newposition(4)
-            elif event.key == pygame.K_r or event.key == pygame.K_UP:
-                soccer.newposition(1)
-            elif event.key == pygame.K_DOWN:
-                soccer.newposition(3)
-            else:
-                soccer.newposition(0)
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_RIGHT] and keys[pygame.K_LSHIFT]:
+                soccer.newposition(2, 1)
+            elif keys[pygame.K_LEFT] and keys[pygame.K_LSHIFT]:
+                soccer.newposition(4, 1)
+            elif keys[pygame.K_UP] and keys[pygame.K_LSHIFT]:
+                soccer.newposition(1, 1)
+            elif keys[pygame.K_DOWN] and keys[pygame.K_LSHIFT]:
+                soccer.newposition(3, 1)
+            elif keys[pygame.K_RIGHT]:
+                soccer.newposition(2, 0)
+            elif keys[pygame.K_LEFT]:
+                soccer.newposition(4, 0)
+            elif keys[pygame.K_UP]:
+                soccer.newposition(1, 0)
+            elif keys[pygame.K_DOWN]:
+                soccer.newposition(3, 0)
     pygame.display.update()
