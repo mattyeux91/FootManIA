@@ -7,12 +7,12 @@ _HEIGHT = 800
 
 # Initialisation
 running = True
-pause = False
 pygame.init()
 root = pygame.display.set_mode((_WIDTH, _HEIGHT))
 pygame.display.set_caption("Football Manager IA")
 background = pygame.display.get_surface()
 game_pitch = Pitch()
+soccer = game_pitch.soccer
 
 
 def draw_pitch():
@@ -24,10 +24,18 @@ while running:
     background.fill((255, 255, 255))
     root.blit(background, (0, 0))
     draw_pitch()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             running = False
-            if event.key == pygame.K_p:
-                pause = not pause
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                soccer.posx += soccer.vitesse
+            elif event.key == pygame.K_LEFT:
+                soccer.posx -= soccer.vitesse
+            elif event.key == pygame.K_r or event.key == pygame.K_UP:
+                soccer.posy -= soccer.vitesse
+            elif event.key == pygame.K_DOWN:
+                soccer.posy += soccer.vitesse
     pygame.display.update()

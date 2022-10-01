@@ -31,6 +31,7 @@ class Pitch(object):
         self.soccer = Soccer(r1, r2)
 
     def render_pitch(self):
+        self.pitch_frame.fill((126, 200, 80))
         # dessine les lignes du terrain
         pygame.draw.rect(self.pitch_frame, (255, 255, 255), (_TOUCH_WIDTH, _TOUCH_WIDTH, _PITCH_WIDTH-2*_TOUCH_WIDTH, _PITCH_HEIGHT-2*_TOUCH_WIDTH), _LINE_THICKNESS)
         # dessine la line médiane
