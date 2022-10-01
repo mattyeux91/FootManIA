@@ -31,11 +31,13 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                soccer.posx += soccer.vitesse
+                soccer.newposition(2)
             elif event.key == pygame.K_LEFT:
-                soccer.posx -= soccer.vitesse
+                soccer.newposition(4)
             elif event.key == pygame.K_r or event.key == pygame.K_UP:
-                soccer.posy -= soccer.vitesse
+                soccer.newposition(1)
             elif event.key == pygame.K_DOWN:
-                soccer.posy += soccer.vitesse
+                soccer.newposition(3)
+            else:
+                soccer.newposition(0)
     pygame.display.update()
