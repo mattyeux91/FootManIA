@@ -9,7 +9,7 @@ class Soccer(object):
         self.posy = posy
         self.soccer_size = _SOCCER_SIZE
         self.vitesse = 18
-        self.acceleration = 6
+        self.acceleration = 20
         self.vitesse_actuelle = 0
         self.sens_actuel = 0
         self.inertie = 0
@@ -22,20 +22,20 @@ class Soccer(object):
         if(self.is_accelerating == 1):
             # dans le même sens
             if(sens - self.sens_actuel == 0):
-                self.inertie += 0.4
+                self.inertie += 0.1
                 self.vitesse_actuelle += self.inertie * self.acceleration
             # sur le côté
             elif(abs(sens - self.sens_actuel) == 1 or abs(sens - self.sens_actuel) == 3):
-                self.inertie -= 0.4
+                self.inertie -= 0.2
                 self.vitesse_actuelle += self.inertie * self.acceleration
             # dans le sens opposé
             elif(abs(sens - self.sens_actuel) == 2):
-                self.inertie -= 0.8
+                self.inertie -= 0.4
                 self.vitesse_actuelle += self.inertie * self.acceleration
 
         # si le footballeur décellère
         elif(self.is_accelerating == 0):
-            self.inertie -= 0.6
+            self.inertie -= 0.3
             self.vitesse_actuelle = _FOOTING_SPEED
 
         # on ne peut changer de sens que lorsque l'inertie est à 0
@@ -52,6 +52,7 @@ class Soccer(object):
         elif(self.vitesse_actuelle <= 0):
             self.vitesse_actuelle = 0
 
+        # déplacement du footballeur
         if(self.sens_actuel == 2):
             self.posx += self.vitesse_actuelle
         if(self.sens_actuel == 4):
@@ -60,6 +61,8 @@ class Soccer(object):
             self.posy -= self.vitesse_actuelle
         if(self.sens_actuel == 3):
             self.posy += self.vitesse_actuelle
+
+        # trace
         print("VITESSE: "+str(self.vitesse_actuelle))
         print("SENS: "+str(self.sens_actuel))
         print("INERTIE: "+str(self.inertie))

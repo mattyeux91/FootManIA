@@ -16,6 +16,7 @@ _PENALT_SIZE = 5
 _CENTRAL_SIZE = 5
 _GOAL_WIDTH = 15
 _GOAL_HEIGHT = 73.2
+_BALL_SIZE = 5
 
 
 class Pitch(object):
@@ -56,6 +57,10 @@ class Pitch(object):
     def render_player(self):
         pygame.draw.circle(self.pitch_frame, (255, 0, 0), (self.soccer.posx, self.soccer.posy), self.soccer.soccer_size/2, width=0)
 
+    def render_ball(self):
+        pygame.draw.circle(self.pitch_frame, (255, 255, 0), (_PITCH_WIDTH/2, _PITCH_HEIGHT/2), _BALL_SIZE, width=0)
+
     def render(self):
         self.render_pitch()
         self.render_player()
+        self.render_ball()
