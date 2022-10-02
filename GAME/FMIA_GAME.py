@@ -1,9 +1,9 @@
 import pygame
 from fmia_pitch import Pitch
+import fmia_settings as settings
 
 _WIDTH = 1200
 _HEIGHT = 800
-
 
 # Initialisation
 running = True
@@ -13,6 +13,7 @@ pygame.display.set_caption("Football Manager IA")
 background = pygame.display.get_surface()
 game_pitch = Pitch()
 soccer = game_pitch.soccer
+debug = True
 
 
 def draw_pitch():
@@ -26,25 +27,28 @@ while running:
     draw_pitch()
 
     for event in pygame.event.get():
+        # if debug:
+        #     pygame.key.set_repeat(int(settings.GENERAL_SETTINGS["REPEAT_ACTION_DELAI"]/settings.GENERAL_SETTINGS["SMOOTHLESSMODE"]))
+        keys = pygame.key.get_pressed()
         if event.type == pygame.QUIT:
             pygame.quit()
             running = False
         elif event.type == pygame.KEYDOWN:
-            keys = pygame.key.get_pressed()
             if keys[pygame.K_RIGHT] and keys[pygame.K_LSHIFT]:
-                soccer.newposition(2, 1)
-            elif keys[pygame.K_LEFT] and keys[pygame.K_LSHIFT]:
-                soccer.newposition(4, 1)
-            elif keys[pygame.K_UP] and keys[pygame.K_LSHIFT]:
-                soccer.newposition(1, 1)
-            elif keys[pygame.K_DOWN] and keys[pygame.K_LSHIFT]:
-                soccer.newposition(3, 1)
-            elif keys[pygame.K_RIGHT]:
-                soccer.newposition(2, 0)
-            elif keys[pygame.K_LEFT]:
-                soccer.newposition(4, 0)
-            elif keys[pygame.K_UP]:
-                soccer.newposition(1, 0)
-            elif keys[pygame.K_DOWN]:
-                soccer.newposition(3, 0)
+                soccer.move(2, True)
+            if keys[pygame.K_LEFT] and keys[pygame.K_LSHIFT]:
+                soccer.move(4, True)
+            if keys[pygame.K_UP] and keys[pygame.K_LSHIFT]:
+                soccer.move(1, True)
+            if keys[pygame.K_DOWN] and keys[pygame.K_LSHIFT]:
+                soccer.move(3, True)
+            if keys[pygame.K_RIGHT]:
+                soccer.move(2, False)
+            if keys[pygame.K_LEFT]:
+                soccer.move(4, False)
+            if keys[pygame.K_UP]:
+                soccer.move(1, False)
+            if keys[pygame.K_DOWN]:
+                soccer.move(3, False)
+
     pygame.display.update()

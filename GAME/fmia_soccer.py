@@ -1,3 +1,5 @@
+import fmia_settings as settings
+
 _SOCCER_SIZE = 20
 _FOOTING_SPEED = 8
 
@@ -9,48 +11,23 @@ class Soccer(object):
         self.posy = posy
         self.soccer_size = _SOCCER_SIZE
         self.vitesse = 18
-        self.acceleration = 20
         self.vitesse_actuelle = 0
         self.sens_actuel = 0
-        self.inertie = 0
-        self.is_accelerating = 0
+        self.is_accelerating = False
+        self.get_balle = False
+        self.attributes = {}
 
-    def newposition(self, sens, is_accelerating):
+    def move(self, sens, is_accelerating):
+        self.sens_actuel = sens
         self.is_accelerating = is_accelerating
 
         # si le footballeur accèlère
-        if(self.is_accelerating == 1):
-            # dans le même sens
-            if(sens - self.sens_actuel == 0):
-                self.inertie += 0.1
-                self.vitesse_actuelle += self.inertie * self.acceleration
-            # sur le côté
-            elif(abs(sens - self.sens_actuel) == 1 or abs(sens - self.sens_actuel) == 3):
-                self.inertie -= 0.2
-                self.vitesse_actuelle += self.inertie * self.acceleration
-            # dans le sens opposé
-            elif(abs(sens - self.sens_actuel) == 2):
-                self.inertie -= 0.4
-                self.vitesse_actuelle += self.inertie * self.acceleration
+        if(self.is_accelerating):
+            self.vitesse_actuelle = self.vitesse/settings.GENERAL_SETTINGS["SMOOTHLESSMODE"]
 
         # si le footballeur décellère
-        elif(self.is_accelerating == 0):
-            self.inertie -= 0.3
-            self.vitesse_actuelle = _FOOTING_SPEED
-
-        # on ne peut changer de sens que lorsque l'inertie est à 0
-        if(self.inertie <= 0):
-            self.inertie = 0
-            self.sens_actuel = sens
-        # inertie maximum
-        elif(self.inertie >= 3):
-            self.inertie = 3
-
-        # vitesses maximum et minimum non dépassables
-        if(self.vitesse_actuelle >= self.vitesse):
-            self.vitesse_actuelle = self.vitesse
-        elif(self.vitesse_actuelle <= 0):
-            self.vitesse_actuelle = 0
+        elif(not self.is_accelerating):
+            self.vitesse_actuelle = _FOOTING_SPEED/settings.GENERAL_SETTINGS["SMOOTHLESSMODE"]
 
         # déplacement du footballeur
         if(self.sens_actuel == 2):
@@ -63,7 +40,11 @@ class Soccer(object):
             self.posy += self.vitesse_actuelle
 
         # trace
-        print("VITESSE: "+str(self.vitesse_actuelle))
-        print("SENS: "+str(self.sens_actuel))
-        print("INERTIE: "+str(self.inertie))
-        print("ACCELERATION ?: "+str(self.is_accelerating))
+        # print("VITESSE: "+str(self.vitesse_actuelle))
+        # print("SENS: "+str(self.sens_actuel))
+        # print("INERTIE: "+str(self.inertie))
+        # print("ACCELERATION ?: "+str(self.is_accelerating))
+
+    def pushball(self, balle):
+        self.get_ball = True
+        balle.move(self.sens_actuel, self.vitesse_actuelle)

@@ -1,6 +1,8 @@
 import pygame
 import random as rdn
 from fmia_soccer import Soccer
+from fmia_ball import Ball
+import math
 
 _PITCH_WIDTH = 1200
 _PITCH_HEIGHT = 800
@@ -27,11 +29,17 @@ class Pitch(object):
         self.game_time = 0  # time to store the total time
         self.pitch_frame = pygame.Surface((_PITCH_WIDTH, _PITCH_HEIGHT))  # main surface
         self.pitch_frame.fill((126, 200, 80))
-        r1 = rdn.randint(_TOUCH_WIDTH, _PITCH_WIDTH)
-        r2 = rdn.randint(_TOUCH_WIDTH, _PITCH_HEIGHT)
-        self.soccer = Soccer(r1, r2)
+        self.soccer = Soccer(rdn.randint(_TOUCH_WIDTH, _PITCH_WIDTH), rdn.randint(_TOUCH_WIDTH, _PITCH_HEIGHT))
+        self.ball = Ball(_PITCH_WIDTH/2, _PITCH_HEIGHT/2)
+        self.rect_soccer = pygame.draw.circle(self.pitch_frame, (255, 0, 0), (self.soccer.posx, self.soccer.posy), self.soccer.soccer_size/2, width=0)
+        self.rect_ball = pygame.draw.circle(self.pitch_frame, (0, 0, 0), (_PITCH_WIDTH/2, _PITCH_HEIGHT/2), _BALL_SIZE, width=0)
 
+# ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# renndering
+# ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     def render_pitch(self):
+        # self.ball.move(self.ball.sens_actuel, self.ball.vitesse_actuelle/1.5-1)
+        self.collision_ball()
         self.pitch_frame.fill((126, 200, 80))
         # dessine les lignes du terrain
         pygame.draw.rect(self.pitch_frame, (255, 255, 255), (_TOUCH_WIDTH, _TOUCH_WIDTH, _PITCH_WIDTH-2*_TOUCH_WIDTH, _PITCH_HEIGHT-2*_TOUCH_WIDTH), _LINE_THICKNESS)
@@ -54,13 +62,35 @@ class Pitch(object):
         pygame.draw.rect(self.pitch_frame, (158, 158, 158), (_TOUCH_WIDTH-_GOAL_WIDTH+2, (_PITCH_HEIGHT-_GOAL_HEIGHT)/2, _GOAL_WIDTH, _GOAL_HEIGHT), 0)
         pygame.draw.rect(self.pitch_frame, (158, 158, 158), (_PITCH_WIDTH-_TOUCH_WIDTH-2, (_PITCH_HEIGHT-_GOAL_HEIGHT)/2, _GOAL_WIDTH, _GOAL_HEIGHT), 0)
 
-    def render_player(self):
-        pygame.draw.circle(self.pitch_frame, (255, 0, 0), (self.soccer.posx, self.soccer.posy), self.soccer.soccer_size/2, width=0)
+    def render_footballeur(self):
+        self.rect_soccer = pygame.draw.circle(self.pitch_frame, (255, 0, 0), (self.soccer.posx, self.soccer.posy), self.soccer.soccer_size/2, width=0)
 
     def render_ball(self):
-        pygame.draw.circle(self.pitch_frame, (255, 255, 0), (_PITCH_WIDTH/2, _PITCH_HEIGHT/2), _BALL_SIZE, width=0)
+        self.rect_ball = pygame.draw.circle(self.pitch_frame, (0, 0, 0), (self.ball.posx, self.ball.posy), _BALL_SIZE, width=0)
 
     def render(self):
         self.render_pitch()
-        self.render_player()
+        self.render_footballeur()
         self.render_ball()
+
+    def collision_ball(self):
+        ax = self.rect_soccer.centerx
+        ay = self.rect_soccer.centery
+        bx = self.rect_ball.centerx
+        by = self.rect_ball.centery
+        cx = bx
+        cy = ay
+        ac = cx - ax
+        bc = by - cy
+        ab = math.sqrt(math.pow(ac, 2) + math.pow(bc, 2))
+        print("ax " + str(ax))
+        print("ay " + str(ay))
+        print("bx " + str(bx))
+        print("by " + str(by))
+        print("cx " + str(cx))
+        print("cy " + str(cy))
+        print("AC " + str(ac))
+        print("BC " + str(bc))
+        print("AB " + str(ab))
+        if self.rect_soccer.colliderect(self.rect_ball):
+            self.soccer.pushball(self.ball)
