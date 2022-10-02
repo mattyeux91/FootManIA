@@ -40,11 +40,38 @@ class Soccer(object):
             self.posy += self.vitesse_actuelle
 
         # trace
-        # print("VITESSE: "+str(self.vitesse_actuelle))
-        # print("SENS: "+str(self.sens_actuel))
-        # print("INERTIE: "+str(self.inertie))
-        # print("ACCELERATION ?: "+str(self.is_accelerating))
+        print("---SOCCER MOVE---")
+        print("VITESSE: "+str(self.vitesse_actuelle))
+        print("SENS: "+str(self.sens_actuel))
+        print("ACCELERATION ?: "+str(self.is_accelerating))
+        print("BALLE ?"+str(self.get_balle))
 
-    def pushball(self, balle):
-        self.get_ball = True
-        balle.move(self.sens_actuel, self.vitesse_actuelle)
+    def pushball(self, balle, type):
+        ax = self.posx
+        ay = self.posy
+        bx = balle.posx
+        by = balle.posy
+        cx = bx
+        cy = ay
+        ac = cx - ax
+        bc = by - cy
+        # ab = math.sqrt(math.pow(ac, 2) + math.pow(bc, 2))
+        # print("ax " + str(ax))
+        # print("ay " + str(ay))
+        # print("bx " + str(bx))
+        # print("by " + str(by))
+        # print("cx " + str(cx))
+        # print("cy " + str(cy))
+        # print("AC " + str(ac))
+        # print("BC " + str(bc))
+        # print("AB " + str(ab))
+        direction = (ac, bc)
+        if type == "CONDUITE":
+            self.get_balle = True
+            balle.move(direction, self.vitesse_actuelle)
+            print("Conduite at " + str(self.vitesse_actuelle))
+        elif type == "PASS" and self.get_balle:
+            self.get_balle = True
+            balle.move(direction, 30)
+            self.get_balle = False
+            print("Pass at " + str(30))

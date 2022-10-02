@@ -2,7 +2,7 @@ import pygame
 import random as rdn
 from fmia_soccer import Soccer
 from fmia_ball import Ball
-import math
+# import math
 
 _PITCH_WIDTH = 1200
 _PITCH_HEIGHT = 800
@@ -25,8 +25,6 @@ class Pitch(object):
 
     def __init__(self):
         self.clock_update = pygame.time.Clock()  # clock to manage time update and FPS
-        self.fall_time = 0  # time to give rythm of the game update (and the falling active piece)
-        self.game_time = 0  # time to store the total time
         self.pitch_frame = pygame.Surface((_PITCH_WIDTH, _PITCH_HEIGHT))  # main surface
         self.pitch_frame.fill((126, 200, 80))
         self.soccer = Soccer(rdn.randint(_TOUCH_WIDTH, _PITCH_WIDTH), rdn.randint(_TOUCH_WIDTH, _PITCH_HEIGHT))
@@ -61,6 +59,7 @@ class Pitch(object):
         # dessine les cages
         pygame.draw.rect(self.pitch_frame, (158, 158, 158), (_TOUCH_WIDTH-_GOAL_WIDTH+2, (_PITCH_HEIGHT-_GOAL_HEIGHT)/2, _GOAL_WIDTH, _GOAL_HEIGHT), 0)
         pygame.draw.rect(self.pitch_frame, (158, 158, 158), (_PITCH_WIDTH-_TOUCH_WIDTH-2, (_PITCH_HEIGHT-_GOAL_HEIGHT)/2, _GOAL_WIDTH, _GOAL_HEIGHT), 0)
+        # self.ball.move(self.ball.direction, self.ball.vitesse_actuelle)
 
     def render_footballeur(self):
         self.rect_soccer = pygame.draw.circle(self.pitch_frame, (255, 0, 0), (self.soccer.posx, self.soccer.posy), self.soccer.soccer_size/2, width=0)
@@ -74,23 +73,24 @@ class Pitch(object):
         self.render_ball()
 
     def collision_ball(self):
-        ax = self.rect_soccer.centerx
-        ay = self.rect_soccer.centery
-        bx = self.rect_ball.centerx
-        by = self.rect_ball.centery
-        cx = bx
-        cy = ay
-        ac = cx - ax
-        bc = by - cy
-        ab = math.sqrt(math.pow(ac, 2) + math.pow(bc, 2))
-        print("ax " + str(ax))
-        print("ay " + str(ay))
-        print("bx " + str(bx))
-        print("by " + str(by))
-        print("cx " + str(cx))
-        print("cy " + str(cy))
-        print("AC " + str(ac))
-        print("BC " + str(bc))
-        print("AB " + str(ab))
+        # ax = self.rect_soccer.centerx
+        # ay = self.rect_soccer.centery
+        # bx = self.rect_ball.centerx
+        # by = self.rect_ball.centery
+        # cx = bx
+        # cy = ay
+        # ac = cx - ax
+        # bc = by - cy
+        # # ab = math.sqrt(math.pow(ac, 2) + math.pow(bc, 2))
+        # # print("ax " + str(ax))
+        # # print("ay " + str(ay))
+        # # print("bx " + str(bx))
+        # # print("by " + str(by))
+        # # print("cx " + str(cx))
+        # # print("cy " + str(cy))
+        # # print("AC " + str(ac))
+        # # print("BC " + str(bc))
+        # # print("AB " + str(ab))
+        # direction = (ac, bc)
         if self.rect_soccer.colliderect(self.rect_ball):
-            self.soccer.pushball(self.ball)
+            self.soccer.pushball(self.ball, "CONDUITE")

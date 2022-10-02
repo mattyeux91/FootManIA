@@ -13,7 +13,7 @@ pygame.display.set_caption("Football Manager IA")
 background = pygame.display.get_surface()
 game_pitch = Pitch()
 soccer = game_pitch.soccer
-debug = True
+ball = game_pitch.ball
 
 
 def draw_pitch():
@@ -27,8 +27,7 @@ while running:
     draw_pitch()
 
     for event in pygame.event.get():
-        # if debug:
-        #     pygame.key.set_repeat(int(settings.GENERAL_SETTINGS["REPEAT_ACTION_DELAI"]/settings.GENERAL_SETTINGS["SMOOTHLESSMODE"]))
+        pygame.key.set_repeat(int(settings.GENERAL_SETTINGS["REPEAT_ACTION_DELAI"]/settings.GENERAL_SETTINGS["SMOOTHLESSMODE"]))
         keys = pygame.key.get_pressed()
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -42,13 +41,15 @@ while running:
                 soccer.move(1, True)
             if keys[pygame.K_DOWN] and keys[pygame.K_LSHIFT]:
                 soccer.move(3, True)
-            if keys[pygame.K_RIGHT]:
+            if keys[pygame.K_RIGHT] and not keys[pygame.K_LSHIFT]:
                 soccer.move(2, False)
-            if keys[pygame.K_LEFT]:
+            if keys[pygame.K_LEFT] and not keys[pygame.K_LSHIFT]:
                 soccer.move(4, False)
-            if keys[pygame.K_UP]:
+            if keys[pygame.K_UP] and not keys[pygame.K_LSHIFT]:
                 soccer.move(1, False)
-            if keys[pygame.K_DOWN]:
+            if keys[pygame.K_DOWN] and not keys[pygame.K_LSHIFT]:
                 soccer.move(3, False)
+            if keys[pygame.K_SPACE]:
+                soccer.pushball(ball, "PASS")
 
     pygame.display.update()
